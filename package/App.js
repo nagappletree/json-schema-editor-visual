@@ -274,7 +274,9 @@ class jsonSchema extends React.Component {
 
     return (
       <div className="json-schema-react-editor">
-        
+        <Button className="import-json-button" type="primary" onClick={this.showModal}>
+          {LocalProvider('import_json')}
+        </Button>
         <Modal
           maskClosable={false}
           visible={visible}
@@ -382,7 +384,22 @@ class jsonSchema extends React.Component {
                         )}
                       </span>
                     ) : null}
-                  </Col>                  
+                  </Col>
+                  <Col span={22}>
+                    <Input
+                      addonAfter={
+                        <Tooltip placement="top" title={'checked_all'}>
+                          <Checkbox
+                            checked={checked}
+                            disabled={disabled}
+                            onChange={e => this.changeCheckBox(e.target.checked)}
+                          />
+                        </Tooltip>
+                      }
+                      disabled
+                      value="root"
+                    />
+                  </Col>
                 </Row>
               </Col>
               <Col span={3} className="col-item col-item-type">
