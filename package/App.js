@@ -274,9 +274,7 @@ class jsonSchema extends React.Component {
 
     return (
       <div className="json-schema-react-editor">
-        <Button className="import-json-button" type="primary" onClick={this.showModal}>
-          {LocalProvider('import_json')}
-        </Button>
+        
         <Modal
           maskClosable={false}
           visible={visible}
