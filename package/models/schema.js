@@ -42,7 +42,7 @@ export default {
     }
 
     if (propertiesData[value] && typeof propertiesData[value] === 'object') {
-      return;
+     // return;
     }
 
     requiredData = requiredData.map(item => {
@@ -191,9 +191,8 @@ export default {
     utils.setData(state.data, parentKeys, requiredData);
   },
 
-  setOpenValueAction: function(state, action, oldState) {
+  setOpenValueAction: function(state, action, oldState) {    
     const keys = action.key.join(utils.JSONPATH_JOIN_CHAR);
-
     let status;
     if (_.isUndefined(action.value)) {
       status = utils.getData(oldState.open, [keys]) ? false : true;

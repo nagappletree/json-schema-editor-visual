@@ -47,12 +47,13 @@ class SchemaArray extends PureComponent {
   constructor(props, context) {
     super(props);
     this._tagPaddingLeftStyle = {};
-    this.Model = context.Model.schema;
+    this.Model = context.Model.schema;    
   }
 
   componentWillMount() {
     const { prefix } = this.props;
     let length = prefix.filter(name => name != 'properties').length;
+    this.length = length++;
     this.__tagPaddingLeftStyle = {
       paddingLeft: `${20 * (length + 1)}px`
     };
@@ -94,8 +95,8 @@ class SchemaArray extends PureComponent {
 
   // 增加子节点
   handleAddChildField = () => {
-    let prefix = this.getPrefix();
-    let keyArr = [].concat(prefix, 'properties');
+    let prefix = this.getPrefix();    
+    let keyArr = [].concat(prefix, 'properties');    
     this.Model.addChildFieldAction({ key: keyArr });
     this.Model.setOpenValueAction({ key: keyArr, value: true });
   };
@@ -117,7 +118,7 @@ class SchemaArray extends PureComponent {
   };
 
   render() {
-    const { data, prefix, showEdit, showAdv } = this.props;
+    const { data, prefix, showEdit, showAdv } = this.props;    
     const items = data.items;
     let prefixArray = [].concat(prefix, 'items');
 
@@ -133,8 +134,8 @@ class SchemaArray extends PureComponent {
               style={this.__tagPaddingLeftStyle}
             >
               <Row type="flex" justify="space-around" align="middle">
-                <Col span={2} className="down-style-col">
-                  {items.type === 'object' ? (
+                {/* <Col span={2} className="down-style-col">
+                  
                     <span className="down-style" onClick={this.handleClickIcon}>
                       {showIcon ? (
                         <Icon className="icon-object" type="caret-down" />
@@ -142,10 +143,10 @@ class SchemaArray extends PureComponent {
                         <Icon className="icon-object" type="caret-right" />
                       )}
                     </span>
-                  ) : null}
-                </Col>
+                  
+                </Col> */}
                 <Col span={22}>
-                  <Input addonAfter={<Checkbox disabled />} disabled value="Items" />
+                  <Input value={Math.random()} disabled/>
                 </Col>
               </Row>
             </Col>
@@ -174,37 +175,29 @@ class SchemaArray extends PureComponent {
                   onChange={this.handleChangeMock}
                 />
               </Col>
-            )}
-            <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-mock">
-              <Input
-                addonAfter={<Icon type="edit" onClick={() => this.handleShowEdit('title')} />}
-                placeholder={LocaleProvider('title')}
-                value={items.title}
-                onChange={this.handleChangeTitle}
-              />
-            </Col>
-            <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-desc">
-              <Input
-                addonAfter={<Icon type="edit" onClick={() => this.handleShowEdit('description')} />}
-                placeholder={LocaleProvider('description')}
-                value={items.description}
-                onChange={this.handleChangeDesc}
-              />
-            </Col>
-            <Col span={this.context.isMock ? 2: 3} className="col-item col-item-setting">
-              <span className="adv-set" onClick={this.handleShowAdv}>
-                <Tooltip placement="top" title={LocaleProvider('adv_setting')}>
-                  <Icon type="setting" />
-                </Tooltip>
-              </span>
+            )}   
+          {
+            items.type !== "object" && items.type !== "array"?(
+              <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-desc">
+            <Input             
+              value={items.description}
+              onChange={this.handleChangeDesc}
+            />
+          </Col> 
+            ):null
+            }
+          
+          
 
-              {items.type === 'object' ? (
+            <Col span={this.context.isMock ? 2: 3} className="col-item col-item-setting"> 
+            <span className="delete-item" onClick={this.handleDeleteItem}>
+              <Icon type="close" className="close" />
+            </span>             
                 <span onClick={this.handleAddChildField}>
                   <Tooltip placement="top" title={LocaleProvider('add_child_node')}>
                     <Icon type="plus" className="plus" />
                   </Tooltip>
                 </span>
-              ) : null}
             </Col>
           </Row>
           <div className="option-formStyle">{mapping(prefixArray, items, showEdit, showAdv)}</div>
@@ -246,7 +239,7 @@ class SchemaItem extends PureComponent {
     let value = e.target.value;
 
     if (data.properties[value] && typeof data.properties[value] === 'object') {
-      return message.error(`The field "${value}" already exists.`);
+      //return message.error(`The field "${value}" already exists.`);
     }
 
     this.Model.changeNameAction({ value, prefix, name });
@@ -280,6 +273,7 @@ class SchemaItem extends PureComponent {
     let prefix = this.getPrefix();
     let key = [].concat(prefix, 'type');
     this.Model.changeTypeAction({ key, value: e });
+    debugger;
   };
 
   // 删除节点
@@ -346,7 +340,7 @@ class SchemaItem extends PureComponent {
             style={this.__tagPaddingLeftStyle}
           >
             <Row type="flex" justify="space-around" align="middle">
-              <Col span={2} className="down-style-col">
+              {/* <Col span={2} className="down-style-col">
                 {value.type === 'object' ? (
                   <span className="down-style" onClick={this.handleClickIcon}>
                     {showIcon ? (
@@ -356,19 +350,9 @@ class SchemaItem extends PureComponent {
                     )}
                   </span>
                 ) : null}
-              </Col>
+              </Col> */}
               <Col span={22}>
-                <FieldInput
-                  addonAfter={
-                    <Tooltip placement="top" title={LocaleProvider('required')}>
-                      <Checkbox
-                        onChange={this.handleEnableRequire}
-                        checked={
-                          _.isUndefined(data.required) ? false : data.required.indexOf(name) != -1
-                        }
-                      />
-                    </Tooltip>
-                  }
+                <FieldInput                 
                   onChange={this.handleChangeName}
                   value={name}
                 />
@@ -412,32 +396,16 @@ class SchemaItem extends PureComponent {
               />
             </Col>
           )}
-
-          <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-mock">
-            <Input
-              addonAfter={<Icon type="edit" onClick={() => this.handleShowEdit('title')} />}
-              placeholder={LocaleProvider('title')}
-              value={value.title}
-              onChange={this.handleChangeTitle}
-            />
-          </Col>
-
-          <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-desc">
-            <Input
-              addonAfter={<Icon type="edit" onClick={() => this.handleShowEdit('description')} />}
-              placeholder={LocaleProvider('description')}
+        {value.type !== 'object' &&  value.type !== 'array'? (
+           <Col span={this.context.isMock ? 4 : 5} className="col-item col-item-desc">
+            <Input              
               value={value.description}
               onChange={this.handleChangeDesc}
             />
           </Col>
+        ):null}
 
-          
-          <Col span={this.context.isMock ? 2: 3}  className="col-item col-item-setting">
-            <span className="adv-set" onClick={this.handleShowAdv}>
-              <Tooltip placement="top" title={LocaleProvider('adv_setting')}>
-                <Icon type="setting" />
-              </Tooltip>
-            </span>
+          <Col span={this.context.isMock ? 2: 3}  className="col-item col-item-setting">            
             <span className="delete-item" onClick={this.handleDeleteItem}>
               <Icon type="close" className="close" />
             </span>

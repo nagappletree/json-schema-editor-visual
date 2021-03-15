@@ -273,10 +273,7 @@ class jsonSchema extends React.Component {
       this.props.schema.type === 'object' || this.props.schema.type === 'array' ? false : true;
 
     return (
-      <div className="json-schema-react-editor">
-        <Button className="import-json-button" type="primary" onClick={this.showModal}>
-          {LocalProvider('import_json')}
-        </Button>
+      <div className="json-schema-react-editor">        
         <Modal
           maskClosable={false}
           visible={visible}
@@ -374,7 +371,7 @@ class jsonSchema extends React.Component {
             <Row type="flex" align="middle">
               <Col span={8} className="col-item name-item col-item-name">
                 <Row type="flex" justify="space-around" align="middle">
-                  <Col span={2} className="down-style-col">
+                  {/* <Col span={2} className="down-style-col">
                     {schema.type === 'object' ? (
                       <span className="down-style" onClick={this.clickIcon}>
                         {this.state.show ? (
@@ -384,18 +381,9 @@ class jsonSchema extends React.Component {
                         )}
                       </span>
                     ) : null}
-                  </Col>
+                  </Col> */}
                   <Col span={22}>
-                    <Input
-                      addonAfter={
-                        <Tooltip placement="top" title={'checked_all'}>
-                          <Checkbox
-                            checked={checked}
-                            disabled={disabled}
-                            onChange={e => this.changeCheckBox(e.target.checked)}
-                          />
-                        </Tooltip>
-                      }
+                    <Input                     
                       disabled
                       value="root"
                     />
@@ -403,19 +391,10 @@ class jsonSchema extends React.Component {
                 </Row>
               </Col>
               <Col span={3} className="col-item col-item-type">
-                <Select
-                  className="type-select-style"
-                  onChange={e => this.changeType(`type`, e)}
-                  value={schema.type || 'object'}
-                >
-                  {SCHEMA_TYPE.map((item, index) => {
-                    return (
-                      <Option value={item} key={index}>
-                        {item}
-                      </Option>
-                    );
-                  })}
-                </Select>
+                  <Input                     
+                      disabled
+                      value="object"
+                    />
               </Col>
               {this.props.isMock && (
                 <Col span={3} className="col-item col-item-mock">
@@ -425,50 +404,13 @@ class jsonSchema extends React.Component {
                     onChange={value => this.changeValue(['mock'], value)}
                   />
                 </Col>
-              )}
-              <Col span={this.props.isMock ? 4 : 5} className="col-item col-item-mock">
-                <Input
-                  addonAfter={
-                    <Icon
-                      type="edit"
-                      onClick={() =>
-                        this.showEdit([], 'title', this.props.schema.title)
-                      }
-                    />
-                  }
-                  placeholder={'Title'}
-                  value={this.props.schema.title}
-                  onChange={e => this.changeValue(['title'], e.target.value)}
-                />
-              </Col>
-              <Col span={this.props.isMock ? 4 : 5} className="col-item col-item-desc">
-                <Input
-                  addonAfter={
-                    <Icon
-                      type="edit"
-                      onClick={() =>
-                        this.showEdit([], 'description', this.props.schema.description)
-                      }
-                    />
-                  }
-                  placeholder={'description'}
-                  value={schema.description}
-                  onChange={e => this.changeValue(['description'], e.target.value)}
-                />
-              </Col>
-              <Col span={2} className="col-item col-item-setting">
-                <span className="adv-set" onClick={() => this.showAdv([], this.props.schema)}>
-                  <Tooltip placement="top" title={LocalProvider('adv_setting')}>
-                    <Icon type="setting" />
-                  </Tooltip>
-                </span>
-                {schema.type === 'object' ? (
+              )}                          
+              <Col span={2} className="col-item col-item-setting">                                
                   <span onClick={() => this.addChildField('properties')}>
                     <Tooltip placement="top" title={LocalProvider('add_child_node')}>
                       <Icon type="plus" className="plus" />
                     </Tooltip>
                   </span>
-                ) : null}
               </Col>
             </Row>
             {this.state.show && (
