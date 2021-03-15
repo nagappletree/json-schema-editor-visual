@@ -384,22 +384,7 @@ class jsonSchema extends React.Component {
                         )}
                       </span>
                     ) : null}
-                  </Col>
-                  <Col span={22}>
-                    <Input
-                      addonAfter={
-                        <Tooltip placement="top" title={'checked_all'}>
-                          <Checkbox
-                            checked={checked}
-                            disabled={disabled}
-                            onChange={e => this.changeCheckBox(e.target.checked)}
-                          />
-                        </Tooltip>
-                      }
-                      disabled
-                      value="root"
-                    />
-                  </Col>
+                  </Col>                  
                 </Row>
               </Col>
               <Col span={3} className="col-item col-item-type">
