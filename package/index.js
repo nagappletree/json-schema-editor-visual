@@ -7,7 +7,8 @@ import moox from 'moox'
 import schema from './models/schema'
 import PropTypes from 'prop-types'
 
-module.exports = (config = {})=>{
+
+const JEditor = (config = {})=>{
   if(config.lang) utils.lang = config.lang;
   
   const Model = moox({
@@ -41,4 +42,6 @@ module.exports = (config = {})=>{
   return Component;
 
 }
+
+export default JEditor;
 

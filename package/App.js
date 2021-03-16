@@ -14,10 +14,7 @@ import {
   Tabs,
   AutoComplete
 } from 'antd';
-const FormItem = Form.Item;
-const Option = Select.Option;
-const { TextArea } = Input;
-const TabPane = Tabs.TabPane;
+
 
 import './index.css';
 import AceEditor from './components/AceEditor/AceEditor.js';
@@ -27,12 +24,16 @@ import SchemaJson from './components/SchemaComponents/SchemaJson.js';
 import PropTypes from 'prop-types';
 import { SCHEMA_TYPE, debounce } from './utils.js';
 import handleSchema from './schema';
-const GenerateSchema = require('generate-schema/src/schemas/json.js');
-const utils = require('./utils');
 import CustomItem from './components/SchemaComponents/SchemaOther.js';
 import LocalProvider from './components/LocalProvider/index.js';
 import MockSelect from './components/MockSelect/index.js';
 
+const FormItem = Form.Item;
+const Option = Select.Option;
+const { TextArea } = Input;
+const TabPane = Tabs.TabPane;
+const GenerateSchema = require('generate-schema/src/schemas/json.js');
+const utils = require('./utils');
 
 
 class jsonSchema extends React.Component {
@@ -391,10 +392,19 @@ class jsonSchema extends React.Component {
                 </Row>
               </Col>
               <Col span={3} className="col-item col-item-type">
-                  <Input                     
-                      disabled
-                      value="object"
-                    />
+                <Select
+                  className="type-select-style"
+                  onChange={e => this.changeType(`type`, e)}
+                  value={schema.type || 'object'}
+                >
+                  {['object', 'array'].map((item, index) => {
+                    return (
+                      <Option value={item} key={index}>
+                        {item}
+                      </Option>
+                    );
+                  })}
+                </Select>
               </Col>
               {this.props.isMock && (
                 <Col span={3} className="col-item col-item-mock">

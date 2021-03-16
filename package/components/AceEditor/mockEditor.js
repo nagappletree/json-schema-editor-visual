@@ -21,7 +21,7 @@ function run(options) {
   var container, data;
   container = options.container || 'mock-editor';
   if (options.wordList && typeof options.wordList === 'object' && options.wordList.name && options.wordList.mock) {
-    wordList.push(options.wordList);
+    //wordList.push(options.wordList);
   }
   data = options.data || '';
   options.readOnly = options.readOnly || false;

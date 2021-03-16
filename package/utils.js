@@ -11,7 +11,7 @@ exports.format = [
   { name: 'uri' }
 ];
 const _ = require('underscore');
-exports.SCHEMA_TYPE = ['string', 'number', 'object', 'boolean', 'integer'];
+exports.SCHEMA_TYPE = ['string', 'number', 'object', 'array','boolean', 'integer'];
 exports.defaultSchema = {
   string: {
     type: 'string'
@@ -20,7 +20,8 @@ exports.defaultSchema = {
     type: 'number'
   },
   array: {
-    type: 'array'    
+    type: 'array',
+    properties: {}   
   },
   object: {
     type: 'object',
@@ -99,7 +100,7 @@ function getFieldstitle(data) {
 
 function handleSchemaRequired(schema, checked) {
   // console.log(schema)
-  if (schema.type === 'object') {
+  if (schema.type === 'object' || schema.type === 'array') {
     let requiredtitle = getFieldstitle(schema.properties);
 
     // schema.required = checked ? [].concat(requiredtitle) : [];
@@ -110,9 +111,9 @@ function handleSchemaRequired(schema, checked) {
     }
 
     handleObject(schema.properties, checked);
-  } else if (schema.type === 'array') {
-    handleSchemaRequired(schema.items, checked);
-  } else {
+  // } else if (schema.type === 'array') {
+  //   handleSchemaRequired(schema.items, checked);
+  // } else {
     return schema;
   }
 }

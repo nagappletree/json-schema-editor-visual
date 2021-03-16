@@ -15,27 +15,29 @@ import {
   Tooltip
 } from 'antd';
 import FieldInput from './FieldInput'
-
-const FormItem = Form.Item;
-const Option = Select.Option;
-const { TextArea } = Input;
 import './schemaJson.css';
 import _ from 'underscore';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { JSONPATH_JOIN_CHAR, SCHEMA_TYPE } from '../../utils.js';
-const InputGroup = Input.Group;
 import LocaleProvider from '../LocalProvider/index.js';
 import utils from '../../utils';
 import MockSelect from '../MockSelect/index.js';
 
+const FormItem = Form.Item;
+const Option = Select.Option;
+const { TextArea } = Input;
+const InputGroup = Input.Group;
+
 const mapping = (name, data, showEdit, showAdv) => {
+  let nameArray = [].concat(name, 'properties');
   switch (data.type) {
     case 'array':
-      return <SchemaArray prefix={name} data={data} showEdit={showEdit} showAdv={showAdv} />;
+     // return <SchemaArray prefix={name} data={data} showEdit={showEdit} showAdv={showAdv} />;
+     return <SchemaObject prefix={nameArray} data={data} showEdit={showEdit} showAdv={showAdv} />;
       break;
     case 'object':
-      let nameArray = [].concat(name, 'properties');
+      
       return <SchemaObject prefix={nameArray} data={data} showEdit={showEdit} showAdv={showAdv} />;
       break;
     default:
@@ -219,6 +221,7 @@ class SchemaItem extends PureComponent {
     this._tagPaddingLeftStyle = {};
     // this.num = 0
     this.Model = context.Model.schema;
+    console.log(props);
   }
 
   componentWillMount() {
@@ -272,8 +275,7 @@ class SchemaItem extends PureComponent {
   handleChangeType = e => {
     let prefix = this.getPrefix();
     let key = [].concat(prefix, 'type');
-    this.Model.changeTypeAction({ key, value: e });
-    debugger;
+    this.Model.changeTypeAction({ key, value: e });    
   };
 
   // 删除节点
@@ -324,6 +326,12 @@ class SchemaItem extends PureComponent {
 
   render() {
     let { name, data, prefix, showEdit, showAdv } = this.props;
+    let arrayChildName  = name;
+    if(data.type ==="array"){
+      try{
+        arrayChildName =   (parseInt(name.split("_")[1]) - parseInt(Object.keys(data.properties)[0].split("_")[1]) + 1).toString();
+      }catch(e){arrayChildName = name.split("_")[1]}
+    }
     let value = data.properties[name];
     let prefixArray = [].concat(prefix, name);
 
@@ -354,7 +362,8 @@ class SchemaItem extends PureComponent {
               <Col span={22}>
                 <FieldInput                 
                   onChange={this.handleChangeName}
-                  value={name}
+                  value={ data.type==="array"?arrayChildName:name}
+                  disabled = {(data.type==="array")}
                 />
               </Col>
             </Row>
@@ -409,7 +418,7 @@ class SchemaItem extends PureComponent {
             <span className="delete-item" onClick={this.handleDeleteItem}>
               <Icon type="close" className="close" />
             </span>
-            {value.type === 'object' ? (
+            {value.type === 'object'  || value.type === 'array'? (
               <DropPlus prefix={prefix} name={name} />
             ) : (
               <span onClick={this.handleAddField}>
